@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DouData 
+	xmlns="http://douChat.cn/dao"
+	xmlns:xsi="http://douChat.cn/dao-instance"
+	xsi:schemaLocation="http://douChat.cn/dao DouData.xsd">
+	<DouImage>
+		<Path>/home/xin/douData/img</Path>
+	</DouImage>
+	<DouConfig>
+		<Path>/home/xin/douData/conf</Path>
+	</DouConfig>
+</DouData>

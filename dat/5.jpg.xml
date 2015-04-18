@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?> 
+<Doupic> 
+	<coverArea>
+		<point>
+			<x>0</x>
+			<y>115</y>
+		</point>
+		<point>
+			<x>142</x>
+			<y>167</y>
+		</point>
+		<color>#f9fbf8</color>
+	</coverArea>
+	<messageArea>
+		<font>
+			<family>宋体</family>
+		</font>
+	</messageArea>
+</Doupic>
