@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.douChat.util.RandomUtil;
+
 public class OnlineList {
 	private static OnlineList instance;
 	private Map<String, OnlineList.LoginInfo> key_info;
@@ -22,7 +24,7 @@ public class OnlineList {
 		// Gen accessKey
 		String accessKey;
 		do {
-			accessKey = generateRandomString(32);
+			accessKey = RandomUtil.generateRandomString(32);
 		} while (!key_info.keySet().contains(accessKey));
 		// Login
 		if (name_key.containsKey(name)) {
@@ -33,17 +35,6 @@ public class OnlineList {
 		key_info.put(accessKey, new LoginInfo(accessKey, ip, name));
 
 		return accessKey;
-	}
-
-	private static String generateRandomString(int length) {
-		String base = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		Random random = new Random();
-		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < length; i++) {
-			int number = random.nextInt(base.length());
-			sb.append(base.charAt(number));
-		}
-		return sb.toString();
 	}
 
 	class LoginInfo {

@@ -9,4 +9,7 @@
 	<DouConfig>
 		<Path>/home/xin/douData/conf</Path>
 	</DouConfig>
+	<DouCache>
+		<Path>/home/xin/douData/cache</Path>
+	</DouCache>
 </DouData>

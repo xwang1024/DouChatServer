@@ -1,4 +1,4 @@
-package com.douChat.dao.impl;
+package com.douChat.dao.impl.manager;
 
 import java.awt.Color;
 import java.io.File;

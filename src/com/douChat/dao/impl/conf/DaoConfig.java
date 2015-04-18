@@ -8,6 +8,7 @@ public class DaoConfig {
 	private static final String XML_NAME = "DouData.xml";
 	private String imagePath;
 	private String configPath;
+	private String cachePath;
 
 	public DaoConfig() throws Exception {
 		System.out.println(this.getClass().getResource(XML_NAME));
@@ -15,6 +16,7 @@ public class DaoConfig {
 		XMLHelper xmlHelper = new XMLHelper(f);
 		imagePath = xmlHelper.getString("/DouData/DouImage/Path");
 		configPath = xmlHelper.getString("/DouData/DouConfig/Path");
+		configPath = xmlHelper.getString("/DouData/DouCache/Path");
 	}
 
 	public String getImagePath() {
@@ -32,4 +34,14 @@ public class DaoConfig {
 	public void setConfigPath(String configPath) {
 		this.configPath = configPath;
 	}
+
+	public String getCachePath() {
+		return cachePath;
+	}
+
+	public void setCachePath(String cachePath) {
+		this.cachePath = cachePath;
+	}
+	
+	
 }

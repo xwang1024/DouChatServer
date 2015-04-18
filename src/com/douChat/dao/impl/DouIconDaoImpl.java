@@ -1,6 +1,7 @@
 package com.douChat.dao.impl;
 
 import com.douChat.dao.DouIconDao;
+import com.douChat.dao.impl.manager.DouIconManager;
 import com.douChat.entities.DouPic;
 
 public class DouIconDaoImpl implements DouIconDao {
@@ -10,5 +11,4 @@ public class DouIconDaoImpl implements DouIconDao {
 		DouIconManager dpm = DouIconManager.getInstance();
 		return dpm.getRandomDouPic();
 	}
-
 }
