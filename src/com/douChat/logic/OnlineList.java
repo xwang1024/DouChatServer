@@ -4,8 +4,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.douChat.logic.exception.AlreadyLoginException;
-
 public class OnlineList {
 	private static OnlineList instance;
 	private Map<String, OnlineList.LoginInfo> key_info;
@@ -21,19 +19,19 @@ public class OnlineList {
 	}
 
 	public String login(String name, String ip) {
-		// Name has been used?
-		if (name_key.containsKey(name)) {
-			throw new AlreadyLoginException("This name has been used");
-		}
 		// Gen accessKey
 		String accessKey;
 		do {
 			accessKey = generateRandomString(32);
 		} while (!key_info.keySet().contains(accessKey));
 		// Login
+		if (name_key.containsKey(name)) {
+			key_info.remove(name_key.get(name));
+			name_key.remove(name);
+		}
 		name_key.put(name, accessKey);
 		key_info.put(accessKey, new LoginInfo(accessKey, ip, name));
-		
+
 		return accessKey;
 	}
 
@@ -52,13 +50,12 @@ public class OnlineList {
 		String accessKey;
 		String ipAddress;
 		String name;
+
 		public LoginInfo(String accessKey, String ipAddress, String name) {
 			super();
 			this.accessKey = accessKey;
 			this.ipAddress = ipAddress;
 			this.name = name;
 		}
-		
-		
 	}
 }

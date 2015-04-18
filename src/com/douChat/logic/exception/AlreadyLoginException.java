@@ -1,6 +1,8 @@
 package com.douChat.logic.exception;
 
-public class AlreadyLoginException extends RuntimeException {
+public class AlreadyLoginException extends Exception {
+
+	private static final long serialVersionUID = 1062914162472104384L;
 
 	public AlreadyLoginException() {
 		super();
