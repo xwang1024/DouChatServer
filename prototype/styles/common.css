@@ -1,0 +1,39 @@
+* {
+	font-family: "Ubuntu Mono", "微软雅黑";
+}
+
+html {
+	height:100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #47ACFF;
+	height:100%;
+}
+
+.mainFrame {
+	width: 400px;
+	height:80%;
+	background-color: white;
+	border-radius: 10px;
+	border: 1px solid gray;
+	margin: auto;
+	margin-top: 5%;
+}
+
+.frameTitle {
+	height: 30px;
+	background: -ms-linear-gradient(top, #2F2F2F,#090909);/* IE 10 */
+	background: -moz-linear-gradient(top,#2F2F2F,#090909);/*火狐*/ 
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#2F2F2F), to(#090909));/*Chrome*/ 
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2F2F2F), to(#090909));/* Safari 4-5, Chrome 1-9*/
+	background: -webkit-linear-gradient(top, #2F2F2F, #090909);   /*Safari5.1 Chrome 10+*/
+	background: -o-linear-gradient(top, #2F2F2F, #090909);  /*Opera 11.10+*/
+	border-radius: 8px 8px 0 0;
+	color: white;
+	font-size: 30px;
+	text-align: center;
+	padding: 15px;
+}
