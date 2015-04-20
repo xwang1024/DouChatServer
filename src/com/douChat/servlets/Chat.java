@@ -29,9 +29,10 @@ public class Chat extends HttpServlet {
 	private ChatBean chatBean;
 
 	/**
+	 * @throws Exception
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public Chat() {
+	public Chat() throws Exception {
 		super();
 		chatBean = new ChatBeanImpl();
 	}
@@ -53,26 +54,34 @@ public class Chat extends HttpServlet {
 					feedback.put("status", "error");
 					feedback.put("message", "Login first, please!");
 				} else {
-					feedback.put("status", "ok");
-					String username = sessionAttrObj.toString();
-					DouMessage[] messages = chatBean.getMessage(username);
-					JSONArray msgArr = new JSONArray();
-					for (int i = 0; i < messages.length; i++) {
-						JSONObject msg = new JSONObject();
-						msg.put("username", messages[i].getSender());
-						msg.put("time", messages[i].getTimeStamp());
-						msg.put("imageUrl", messages[i].getDouPicUrl());
-						msgArr.put(msg);
+					Object timestampObject = request.getAttribute("timestamp");
+					try {
+						long lastTimestamp = Long.parseLong(timestampObject + "");
+						feedback.put("status", "ok");
+						String username = sessionAttrObj.toString();
+						DouMessage[] messages = chatBean.getMessage(username, lastTimestamp);
+						JSONArray msgArr = new JSONArray();
+						for (int i = 0; i < messages.length; i++) {
+							JSONObject msg = new JSONObject();
+							msg.put("username", messages[i].getSender());
+							msg.put("time", messages[i].getTimeStamp());
+							msg.put("imageId", messages[i].getDouPicId());
+							msgArr.put(msg);
+						}
+						feedback.put("messageList", msgArr);
+						feedback.put("timestamp", messages[messages.length-1].getTimeStamp());
+					} catch (Exception e) {
+						feedback.put("status", "error");
+						feedback.put("message", "Timestamp is not provided or has wrong format!");
 					}
-					feedback.put("messageList", msgArr);
 				}
 			}
 			// if client is cellphone app
 			else {
 				// TODO cellphone app request
-				
+
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			try {
 				feedback.put("status", "serverError");
 			} catch (JSONException e1) {
@@ -114,16 +123,16 @@ public class Chat extends HttpServlet {
 						String username = sessionAttrObj.toString();
 						DouMessage douMessage = chatBean.sendMessage(username, message);
 						feedback.put("status", "ok");
-						feedback.put("imageUrl", douMessage.getDouPicUrl());
+						feedback.put("imageId", douMessage.getDouPicId());
 					}
 				}
 				// if client is cellphone app
 				else {
 					// TODO cellphone app request
-					
+
 				}
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			try {
 				feedback.put("status", "serverError");
 			} catch (JSONException e1) {

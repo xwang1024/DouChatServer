@@ -2,7 +2,6 @@ package com.douChat.dao.impl;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import javax.imageio.ImageIO;
 
@@ -15,10 +14,10 @@ public class DouIconCacheDaoImpl implements DouIconCacheDao {
 	private File cacheRoot;
 
 	public DouIconCacheDaoImpl() throws Exception {
-		daoConfig = new DaoConfig();
+		daoConfig = DaoConfig.getInstance();
 		cacheRoot = new File(daoConfig.getCachePath());
 		if (!cacheRoot.exists()) {
-			throw new FileNotFoundException(daoConfig.getCachePath());
+			cacheRoot.mkdirs();
 		}
 	}
 
@@ -27,8 +26,8 @@ public class DouIconCacheDaoImpl implements DouIconCacheDao {
 		File target;
 		String fileName;
 		do {
-			fileName = RandomUtil.generateRandomString(16).concat(".jpg");
-			target = new File(cacheRoot, fileName);
+			fileName = RandomUtil.generateRandomString(16);
+			target = new File(cacheRoot, fileName.concat(".jpg"));
 		} while (target.exists());
 		ImageIO.write(img, "jpg", target);
 		return fileName;
@@ -36,7 +35,7 @@ public class DouIconCacheDaoImpl implements DouIconCacheDao {
 
 	@Override
 	public BufferedImage getCache(String cacheName) throws Exception {
-		return ImageIO.read(new File(cacheRoot,cacheName));
+		return ImageIO.read(new File(cacheRoot, cacheName.concat(".jpg")));
 	}
 
 }

@@ -6,12 +6,12 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 import com.douChat.dao.impl.conf.DaoConfig;
-import com.douChat.dao.impl.helper.ColorHelper;
 import com.douChat.dao.impl.helper.FileTypeHelper;
 import com.douChat.dao.impl.helper.ImageHelper;
 import com.douChat.dao.impl.helper.XMLHelper;
 import com.douChat.dao.impl.structure.LRUHashMap;
 import com.douChat.entities.DouPic;
+import com.douChat.util.ColorUtil;
 
 public class DouIconManager {
 	private static final int cacheVolume = 10;
@@ -48,7 +48,7 @@ public class DouIconManager {
 	}
 
 	private DouIconManager() throws Exception {
-		conf = new DaoConfig();
+		conf = DaoConfig.getInstance();
 		File imagePath = new File(conf.getImagePath());
 		System.out.println(imagePath.getAbsolutePath());
 		System.out.println(imagePath.exists());
@@ -75,17 +75,13 @@ public class DouIconManager {
 		p.setImage(ImageHelper.getImage(imageFile));
 
 		XMLHelper xmlHelper = new XMLHelper(confFile);
-		Integer[] coverVerticeX = xmlHelper
-				.getIntegerList("/Doupic/coverArea/point/x");
+		Integer[] coverVerticeX = xmlHelper.getIntegerList("/Doupic/coverArea/point/x");
 		p.setCoverVerticeX(coverVerticeX);
-		Integer[] coverVerticeY = xmlHelper
-				.getIntegerList("/Doupic/coverArea/point/y");
+		Integer[] coverVerticeY = xmlHelper.getIntegerList("/Doupic/coverArea/point/y");
 		p.setCoverVerticeY(coverVerticeY);
-		int coverColor = ColorHelper.HexToRGB(xmlHelper
-				.getString("/Doupic/coverArea/color"));
+		int coverColor = ColorUtil.HexToRGB(xmlHelper.getString("/Doupic/coverArea/color"));
 		p.setCoverColor(new Color(coverColor));
-		String fontFamily = xmlHelper
-				.getString("/Doupic/messageArea/font/family");
+		String fontFamily = xmlHelper.getString("/Doupic/messageArea/font/family");
 		p.setFontFamily(fontFamily);
 		return p;
 	}

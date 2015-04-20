@@ -4,20 +4,20 @@ import java.util.Date;
 
 public class DouMessage {
 	private String sender;
-	private int timeStamp;
-	private String douPicUrl;
+	private long timeStamp;
+	private String douPicId;
 	private String content;
 
-	public DouMessage(String sender, String douPicUrl, String content) {
+	public DouMessage(String sender, String douPicId, String content) {
 		this.sender = sender;
 		this.timeStamp = genTimeStamp();
-		this.douPicUrl = douPicUrl;
+		this.douPicId = douPicId;
 		this.content = content;
 	}
 
-	private int genTimeStamp() {
+	private long genTimeStamp() {
 		Date date = new Date();
-		return (int) (date.getTime() / 10000);
+		return date.getTime();
 	}
 
 	public String getSender() {
@@ -28,11 +28,11 @@ public class DouMessage {
 		this.sender = sender;
 	}
 
-	public int getTimeStamp() {
+	public long getTimeStamp() {
 		return timeStamp;
 	}
 
-	public void setTimeStamp(int timeStamp) {
+	public void setTimeStamp(long timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 
@@ -44,12 +44,11 @@ public class DouMessage {
 		this.content = content;
 	}
 
-	public String getDouPicUrl() {
-		return douPicUrl;
+	public String getDouPicId() {
+		return douPicId;
 	}
 
-	public void setDouPicUrl(String douPicUrl) {
-		this.douPicUrl = douPicUrl;
+	public void setDouPicId(String douPicId) {
+		this.douPicId = douPicId;
 	}
-
 }

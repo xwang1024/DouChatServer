@@ -1,8 +1,10 @@
 var ROOT_URL = "/DouChatServer";
 var LOGIN_PATH = "/login";
 var CHAT_PATH = "/chat";
+var IMAGE_PATH = "/cache";
 var LOGIN_URL = ROOT_URL + LOGIN_PATH;
 var CHAT_URL = ROOT_URL + CHAT_PATH;
+var IMAGE_URL = ROOT_URL + IMAGE_PATH;
 
 var myName;
 var accessKey;
@@ -50,7 +52,7 @@ function sendMessage(message) {
 		if(data["status"] != "ok") {
 			alert(data["message"]);
 		} else {
-			addMessageToList(".myMessagePane", myName, data["imageUrl"])
+			addMessageToList(".myMessagePane", myName, data["imageId"])
 		}
 	},dataType);
 }
@@ -91,7 +93,11 @@ function sendMessageAction() {
 	sendMessage(message);
 }
 
-function addMessageToList(pane, name, imageUrl) {
+function generateImageQueryUrl(imageId) {
+	return IMAGE_URL + "?id=" + imageId;
+}
+
+function addMessageToList(pane, name, imageId) {
 	$(pane + ".demoPane").clone()
 		.appendTo($(".douMsgList"))
 		.removeClass("demoPane")
@@ -100,7 +106,7 @@ function addMessageToList(pane, name, imageUrl) {
 		.find(".namePane").html(name)
 		.siblings(".messageContentPane")
 		.children("img")
-		.attr("src",imageUrl);
+		.attr("src",generateImageQueryUrl(imageId));
 	$(".douMsgList").scrollTop($(".douMsgList")[0].scrollHeight);
 }
 

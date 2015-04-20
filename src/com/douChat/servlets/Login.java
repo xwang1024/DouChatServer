@@ -71,7 +71,11 @@ public class Login extends HttpServlet {
 				feedback.put("status", "ok");
 				feedback.put("accessKey", accessKey);
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
+			try {
+				feedback.put("status", "serverError");
+			} catch (JSONException e1) {
+			}
 			e.printStackTrace();
 		}
 		ServletOutputStream out = response.getOutputStream();

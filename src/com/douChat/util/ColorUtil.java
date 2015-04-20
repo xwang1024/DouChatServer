@@ -1,6 +1,6 @@
-package com.douChat.dao.impl.helper;
+package com.douChat.util;
 
-public class ColorHelper {
+public class ColorUtil {
 	public static int HexToRGB(String color) throws Exception {
 		color = color.trim();
 		if(!color.startsWith("#")) {

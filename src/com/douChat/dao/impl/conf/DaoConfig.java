@@ -5,18 +5,23 @@ import java.io.File;
 import com.douChat.dao.impl.helper.XMLHelper;
 
 public class DaoConfig {
+	private static DaoConfig instance;
 	private static final String XML_NAME = "DouData.xml";
 	private String imagePath;
 	private String configPath;
 	private String cachePath;
 
-	public DaoConfig() throws Exception {
+	private DaoConfig() throws Exception {
 		System.out.println(this.getClass().getResource(XML_NAME));
 		File f = new File(this.getClass().getResource(XML_NAME).getPath());
 		XMLHelper xmlHelper = new XMLHelper(f);
 		imagePath = xmlHelper.getString("/DouData/DouImage/Path");
 		configPath = xmlHelper.getString("/DouData/DouConfig/Path");
-		configPath = xmlHelper.getString("/DouData/DouCache/Path");
+		cachePath = xmlHelper.getString("/DouData/DouCache/Path");
+	}
+	
+	public static DaoConfig getInstance() throws Exception {
+		return instance==null?(instance = new DaoConfig()):(instance);
 	}
 
 	public String getImagePath() {

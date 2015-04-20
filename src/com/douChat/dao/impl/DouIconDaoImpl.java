@@ -5,10 +5,14 @@ import com.douChat.dao.impl.manager.DouIconManager;
 import com.douChat.entities.DouPic;
 
 public class DouIconDaoImpl implements DouIconDao {
+	private DouIconManager dpm;
+	
+	public DouIconDaoImpl() throws Exception {
+		dpm = DouIconManager.getInstance();
+	}
 
 	@Override
-	public DouPic getRandomPic() throws Exception {
-		DouIconManager dpm = DouIconManager.getInstance();
+	public DouPic getRandomPic() {
 		return dpm.getRandomDouPic();
 	}
 }
