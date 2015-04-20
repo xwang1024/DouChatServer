@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta chatset="utf-8"/>
+    <title>DouChat Demo</title>
+    <link rel="stylesheet" type="text/css" href="styles/common.css">
+</head>
+<body>
+	<div class="mask" style="display:none;">
+		<div class="loginFrame">
+			<div class="douTitle loginTitle">Please login...</div>
+			<div class="loginInputArea">
+				<input type="text" placeholder="Please enter you nickname..." name="usernameTf">
+				<br/>
+				<span id="loginFeedback">Any other name please...</span>
+			</div>
+			<div class="loginSubmitArea">
+				<button id="loginReturnBtn">Return</button>
+				<button id="loginBtn">Login</button>
+			</div>
+		</div>
+	</div>
+	<div class="mainFrame">
+		<div class="douTitle chatTitle">Dou Chat</div>
+		<div class="douMsgList">
+			<div class="messagePane demoPane">
+				<div class="headIcon">P</div>
+				<div class="messageBody">
+					<div class="namePane">PPTennos</div>
+					<div class="messageContentPane">
+						<div class="triangle-left"></div>
+						<div class="messageContainer">
+							<img src="images/2.jpg">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="myMessagePane demoPane">
+				<div class="headIcon">W</div>
+				<div class="messageBody">
+					<div class="namePane">Water</div>
+					<div class="messageContentPane">
+						<div class="triangle-right"></div>
+						<div class="messageContainer">
+							<img src="images/3.jpg">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="douMsgSender">
+			<input class="douInput" type="text" name="sendMessageTf">
+			<button class="douSendBtn" id="sendMessageBtn">Send</button>
+		</div>
+	</div>
+	<script type="text/javascript" src="scripts/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="scripts/douChat.js"></script>
+</body>
+</html>
+

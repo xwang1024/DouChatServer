@@ -1,7 +1,6 @@
 package com.douChat.logic;
 
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.douChat.util.RandomUtil;
@@ -25,7 +24,7 @@ public class OnlineList {
 		String accessKey;
 		do {
 			accessKey = RandomUtil.generateRandomString(32);
-		} while (!key_info.keySet().contains(accessKey));
+		} while (key_info.keySet().contains(accessKey));
 		// Login
 		if (name_key.containsKey(name)) {
 			key_info.remove(name_key.get(name));

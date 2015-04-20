@@ -1,10 +1,14 @@
-var ROOT_URL = "http://localhost:8080/DouChatServer";
+var ROOT_URL = "/DouChatServer";
 var LOGIN_PATH = "/login";
-var GET_MESSAGE_PATH = "/getMessage";
-var SEND_MESSAGE_PATH = "/sendMessage";
+var GET_MESSAGE_PATH = "chat/getMessage";
+var SEND_MESSAGE_PATH = "chat/sendMessage";
+var LOGIN_URL = ROOT_URL + LOGIN_PATH;
+var GET_MESSAGE_URL = ROOT_URL + GET_MESSAGE_PATH;
+var SEND_MESSAGE_URL = ROOT_URL + SEND_MESSAGE_PATH;
 
 var myName;
 var accessKey;
+var lastGetStamp = 0;
 
 var dataType = "html";
 
@@ -19,7 +23,8 @@ function login(username) {
 
 function getMessage() {
 	$.post(GET_MESSAGE_URL, {
-		"accessKey":accessKey
+		"accessKey": accessKey,
+		"timestamp": lastGetStamp
 	}, function(data, status) {
 		alert(status);
 		return data;
@@ -50,16 +55,16 @@ function showLoginFrame() {
 function loginAction() {
 	var username = $("input[name='usernameTf']").val();
 	if(username == "") {
-		$("#loginFeedback").html("Username cannot be empty.").css({"display","block"});
+		$("#loginFeedback").html("Username cannot be empty.").css("display","block");
 		return;
 	}
 	var feedbackJson = login(username);
 	if(feedbackJson["status"] != "ok") {
-		$("#loginFeedback").html(feedbackJson["message"]).css({"display","block"});
+		$("#loginFeedback").html(feedbackJson["message"]).css("display","block");
 	} else {
 		accessKey = feedbackJson["accessKey"];
 		myName = username;
-		$("#loginFeedback").css({"display","none"});
+		$("#loginFeedback").css("display","none");
 	}
 }
 
@@ -110,17 +115,17 @@ function startMessageThread() {
 
 $(document).ready(function() {
 	alert(accessKey);
-	$("#loginBtn").bind("click",loginAction);
-	$("input[name='usernameTf']").bind("keypress", function(keyEvent) {
-		if(keyEvent.keyCode == 13) {
-			loginAction();
-		}
-	});
-	$("#sendMessageBtn").bind("click",sendMessageAction);
-	$("input[name='sendMessageTf']").bind("keypress", function(keyEvent) {
-		if(keyEvent.keyCode == 13) {
-			sendMessageAction();
-		}
-	});
+	// $("#loginBtn").bind("click",loginAction);
+	// $("input[name='usernameTf']").bind("keypress", function(keyEvent) {
+	// 	if(keyEvent.keyCode == 13) {
+	// 		loginAction();
+	// 	}
+	// });
+	// $("#sendMessageBtn").bind("click",sendMessageAction);
+	// $("input[name='sendMessageTf']").bind("keypress", function(keyEvent) {
+	// 	if(keyEvent.keyCode == 13) {
+	// 		sendMessageAction();
+	// 	}
+	// });
 	var tid = startMessageThread();
 });

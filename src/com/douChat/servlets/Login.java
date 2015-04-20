@@ -1,6 +1,7 @@
 package com.douChat.servlets;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -13,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.douChat.logic.OnlineList;
+import com.douChat.servlets.helper.PostHelper;
 
 /**
  * Servlet implementation class Login
@@ -35,17 +37,17 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		JSONObject feedback = new JSONObject();
-		try {
-			feedback.put("status", "error");
-			feedback.put("message", "Login method must be POST!");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		ServletOutputStream out = response.getOutputStream();
-		out.print(feedback.toString());
-		out.flush();
-		out.close();
+		// JSONObject feedback = new JSONObject();
+		// try {
+		// feedback.put("status", "error");
+		// feedback.put("message", "Login method must be POST!");
+		// } catch (JSONException e) {
+		// e.printStackTrace();
+		// }
+		// ServletOutputStream out = response.getOutputStream();
+		// out.print(feedback.toString());
+		// out.flush();
+		// out.close();
 	}
 
 	/**
@@ -54,8 +56,11 @@ public class Login extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		Map<String, String> postMap = PostHelper.getPostContent(request
+				.getInputStream());
+
 		OnlineList onlineList = OnlineList.getInstance();
-		String accessKey = onlineList.login("" + request.getAttribute("name"),
+		String accessKey = onlineList.login(postMap.get("username"),
 				request.getRemoteAddr());
 		JSONObject feedback = new JSONObject();
 		try {
@@ -64,6 +69,9 @@ public class Login extends HttpServlet {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		System.out.println(postMap.get("username"));
+		System.out.println(request.getRemoteAddr());
+		response.setContentType("application/json;charset=UTF-8");
 		ServletOutputStream out = response.getOutputStream();
 		out.print(feedback.toString());
 		out.flush();
