@@ -8,17 +8,19 @@ public class MessageDaoImpl implements MessageDao {
 	private MessageList list;
 
 	public MessageDaoImpl() {
+		System.out.println("MessageDaoImpl construct");
 		list = MessageList.getInstance();
 	}
 
 	@Override
 	public DouMessage[] getMessage(String username, long lastTimeStamp) throws Exception {
-		list.getMessage(username, lastTimeStamp);
-		return null;
+		System.out.println("MessageDaoImpl getMessage");
+		return list.getMessage(username, lastTimeStamp);
 	}
 
 	@Override
 	public void addMessage(DouMessage message) throws Exception {
+		System.out.println("MessageDaoImpl addMessage");
 		list.addMessage(message);
 	}
 }

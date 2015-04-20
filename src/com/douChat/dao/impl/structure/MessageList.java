@@ -9,8 +9,6 @@ import com.douChat.entities.DouMessage;
 
 public class MessageList {
 	private static MessageList instance;
-	private int maxOpacity = 50;
-	private int free = 10;
 	private List<DouMessage> list;
 
 	private MessageList() {
@@ -26,14 +24,16 @@ public class MessageList {
 			return list.toArray(new DouMessage[list.size()]);
 		}
 		Stack<DouMessage> msgStack = new Stack<DouMessage>();
-		int startIndex = list.size() - 1;
-		while (startIndex >= 0) {
-			DouMessage message = list.get(startIndex);
-			if (message.getTimeStamp() >= startStamp) {
-				if (!message.getSender().equals(username)) {
+		for (int i = list.size() - 1; i >= 0; i--) {
+			DouMessage message = list.get(i);
+			if (message.getTimeStamp() > startStamp) {
+				if (username == null) {
 					msgStack.push(message);
+				} else {
+					if (!message.getSender().equals(username)) {
+						msgStack.push(message);
+					}
 				}
-				startIndex--;
 			}
 		}
 		DouMessage[] msgWillShow = new DouMessage[msgStack.size()];
@@ -44,10 +44,10 @@ public class MessageList {
 	}
 
 	public void addMessage(DouMessage msg) {
-		if (list.size() > maxOpacity) {
-			for (int i = 0; i < free; i++)
-				list.remove(0);
-		}
+		// if (list.size() > maxOpacity) {
+		// for (int i = 0; i < free; i++)
+		// list.remove(0);
+		// }
 		list.add(msg);
 	}
 }

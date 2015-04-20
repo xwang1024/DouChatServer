@@ -32,7 +32,7 @@ public class ChatBeanImpl implements ChatBean {
 		DouPic douPic = did.getRandomPic();
 		BufferedImage generatedImage = DouPicHelper.generate(douPic, message);
 		String picId = dicd.doCache(generatedImage);
-		DouMessage douMessage = new DouMessage(message, picId, message);
+		DouMessage douMessage = new DouMessage(username, picId, message);
 		md.addMessage(douMessage);
 		return douMessage;
 	}

@@ -14,6 +14,7 @@ public class DouIconCacheDaoImpl implements DouIconCacheDao {
 	private File cacheRoot;
 
 	public DouIconCacheDaoImpl() throws Exception {
+		System.out.println("DouIconCacheDaoImpl construct");
 		daoConfig = DaoConfig.getInstance();
 		cacheRoot = new File(daoConfig.getCachePath());
 		if (!cacheRoot.exists()) {
@@ -23,6 +24,7 @@ public class DouIconCacheDaoImpl implements DouIconCacheDao {
 
 	@Override
 	public String doCache(BufferedImage img) throws Exception {
+		System.out.println("DouIconCacheDaoImpl doCache");
 		File target;
 		String fileName;
 		do {
@@ -35,6 +37,7 @@ public class DouIconCacheDaoImpl implements DouIconCacheDao {
 
 	@Override
 	public BufferedImage getCache(String cacheName) throws Exception {
+		System.out.println("DouIconCacheDaoImpl getCache");
 		return ImageIO.read(new File(cacheRoot, cacheName.concat(".jpg")));
 	}
 

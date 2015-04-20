@@ -1,7 +1,7 @@
 package com.douChat.servlets;
 
 import java.io.IOException;
-import java.util.Map;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -18,13 +18,12 @@ import org.json.JSONObject;
 import com.douChat.beans.ChatBean;
 import com.douChat.beans.impl.ChatBeanImpl;
 import com.douChat.entities.DouMessage;
-import com.douChat.servlets.helper.PostHelper;
 
 /**
  * Servlet implementation class Test
  */
 @WebServlet("/chat")
-public class Chat extends HttpServlet {
+public class ChatServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ChatBean chatBean;
 
@@ -32,7 +31,7 @@ public class Chat extends HttpServlet {
 	 * @throws Exception
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public Chat() throws Exception {
+	public ChatServlet() throws Exception {
 		super();
 		chatBean = new ChatBeanImpl();
 	}
@@ -47,33 +46,36 @@ public class Chat extends HttpServlet {
 		try {
 			// if client is explorer
 			if (!request.getHeader("User-Agent").contains("DouChatClient")) {
+				feedback.put("status", "ok");
 				HttpSession session = request.getSession();
 				Object sessionAttrObj = null;
+				String username = null;
 				// Check if login
-				if ((sessionAttrObj = session.getAttribute("username")) == null) {
-					feedback.put("status", "error");
-					feedback.put("message", "Login first, please!");
-				} else {
-					Object timestampObject = request.getAttribute("timestamp");
-					try {
-						long lastTimestamp = Long.parseLong(timestampObject + "");
-						feedback.put("status", "ok");
-						String username = sessionAttrObj.toString();
-						DouMessage[] messages = chatBean.getMessage(username, lastTimestamp);
-						JSONArray msgArr = new JSONArray();
-						for (int i = 0; i < messages.length; i++) {
-							JSONObject msg = new JSONObject();
-							msg.put("username", messages[i].getSender());
-							msg.put("time", messages[i].getTimeStamp());
-							msg.put("imageId", messages[i].getDouPicId());
-							msgArr.put(msg);
-						}
-						feedback.put("messageList", msgArr);
-						feedback.put("timestamp", messages[messages.length-1].getTimeStamp());
-					} catch (Exception e) {
-						feedback.put("status", "error");
-						feedback.put("message", "Timestamp is not provided or has wrong format!");
+				if ((sessionAttrObj = session.getAttribute("username")) != null) {
+					username = sessionAttrObj.toString();
+				}
+				try {
+					String timestamp = request.getParameter("timestamp");
+					long lastTimestamp = Long.parseLong(timestamp);
+					DouMessage[] messages = chatBean.getMessage(username, lastTimestamp);
+					JSONArray msgArr = new JSONArray();
+					for (int i = 0; i < messages.length; i++) {
+						JSONObject msg = new JSONObject();
+						msg.put("username", messages[i].getSender());
+						msg.put("time", messages[i].getTimeStamp());
+						msg.put("imageId", messages[i].getDouPicId());
+						msgArr.put(msg);
 					}
+					feedback.put("messageList", msgArr);
+					String timeStampStr = "0";
+					if(messages.length != 0) {
+						timeStampStr = messages[messages.length - 1].getTimeStamp()+"";
+					}
+					feedback.put("timestamp", timeStampStr);
+				} catch (Exception e) {
+					feedback.put("status", "error");
+					feedback.put("message", "Timestamp is not provided or has wrong format!");
+					e.printStackTrace();
 				}
 			}
 			// if client is cellphone app
@@ -88,10 +90,10 @@ public class Chat extends HttpServlet {
 			}
 			e.printStackTrace();
 		}
-		ServletOutputStream out = response.getOutputStream();
-		out.print(feedback.toString());
-		out.flush();
-		out.close();
+		PrintWriter writer = response.getWriter();
+		writer.print(feedback.toString());
+		writer.flush();
+		writer.close();
 	}
 
 	/**
@@ -103,8 +105,7 @@ public class Chat extends HttpServlet {
 		JSONObject feedback = new JSONObject();
 
 		try {
-			Map<String, String> postMap = PostHelper.getPostContent(request.getInputStream());
-			String message = postMap.get("message");
+			String message = request.getParameter("message");
 			// Check if message is empty
 			if (message == null || message.length() == 0) {
 				feedback.put("status", "error");
@@ -139,10 +140,10 @@ public class Chat extends HttpServlet {
 			}
 			e.printStackTrace();
 		}
-		ServletOutputStream out = response.getOutputStream();
-		out.print(feedback.toString());
-		out.flush();
-		out.close();
+		PrintWriter writer = response.getWriter();
+		writer.print(feedback.toString());
+		writer.flush();
+		writer.close();
 	}
 
 }

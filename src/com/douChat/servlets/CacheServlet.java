@@ -51,6 +51,9 @@ public class CacheServlet extends HttpServlet {
 		if (img == null) {
 			return;
 		}
+		response.setHeader("Cache-control", "no-cache");
+		response.setHeader("Pragma", "no-cache");
+		response.setHeader("Expires", "-1");
 		response.setContentType("image/jpeg");
 		ServletOutputStream out = response.getOutputStream();
 		ImageIO.write(img, "jpg", out);

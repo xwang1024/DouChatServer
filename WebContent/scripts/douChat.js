@@ -7,7 +7,6 @@ var CHAT_URL = ROOT_URL + CHAT_PATH;
 var IMAGE_URL = ROOT_URL + IMAGE_PATH;
 
 var myName;
-var accessKey;
 var lastGetStamp = 0;
 
 var dataType = "json";
@@ -20,7 +19,6 @@ function login(username) {
 		if(data["status"] != "ok") {
 			$("#loginFeedback").html(data["message"]).css("display","block");
 		} else {
-			accessKey = data["accessKey"];
 			myName = username;
 			hideLoginFrame();
 		}
@@ -28,7 +26,7 @@ function login(username) {
 }
 
 function getMessage() {
-	$.get(GET_MESSAGE_URL, {
+	$.get(CHAT_URL, {
 		"timestamp": lastGetStamp
 	}, function(data, status) {
 		if(status != "success") {
@@ -39,14 +37,15 @@ function getMessage() {
 			alert(data["message"]);
 		} else {
 			$.each(data["messageList"], function(idx,msg) {
-				addMessageToList(".messagePane", msg["username"], msg["imageUrl"]);
+				addMessageToList(".messagePane", msg["username"], msg["imageId"]);
 			});
+			lastGetStamp = data["timestamp"];
 		}
 	},dataType);
 }
 
 function sendMessage(message) {
-	$.post(SEND_MESSAGE_URL, {
+	$.post(CHAT_URL, {
 		"message":message
 	}, function(data, status) {
 		if(data["status"] != "ok") {
@@ -58,7 +57,7 @@ function sendMessage(message) {
 }
 
 function checkLogin() {
-	if(typeof(accessKey) == "undefined") {
+	if(typeof(myName) == "undefined") {
 		return false;
 	}
 	return true;
@@ -87,6 +86,7 @@ function sendMessageAction() {
 		return;
 	}
 	var message = $("input[name='sendMessageTf']").val();
+	$("input[name='sendMessageTf']").val("");
 	if(message == "") {
 		return;
 	}
@@ -98,14 +98,15 @@ function generateImageQueryUrl(imageId) {
 }
 
 function addMessageToList(pane, name, imageId) {
-	$(pane + ".demoPane").clone()
+//	alert(generateImageQueryUrl(imageId));
+	$img = $(pane + ".demoPane").clone()
 		.appendTo($(".douMsgList"))
 		.removeClass("demoPane")
 		.find(".headIcon").html(name[0])
 		.siblings(".messageBody")
 		.find(".namePane").html(name)
 		.siblings(".messageContentPane")
-		.children("img")
+		.find("img")
 		.attr("src",generateImageQueryUrl(imageId));
 	$(".douMsgList").scrollTop($(".douMsgList")[0].scrollHeight);
 }
@@ -113,7 +114,7 @@ function addMessageToList(pane, name, imageId) {
 function startMessageThread() {
 	var tid = setInterval(function() {
 		var feedback = getMessage();
-	},2000);
+	},1000);
 	return tid;
 }
 
