@@ -1,4 +1,4 @@
-package com.douChat.logic;
+package com.douChat.dao.impl;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -2,17 +2,16 @@ package com.douChat.entities;
 
 import java.util.Date;
 
-public class ChatMessage {
+public class DouMessage {
 	private String sender;
 	private int timeStamp;
-	private String douPicName;
-	private String cacheId;
+	private String douPicUrl;
 	private String content;
 
-	public ChatMessage(String sender, String douPicName, String content) {
+	public DouMessage(String sender, String douPicUrl, String content) {
 		this.sender = sender;
 		this.timeStamp = genTimeStamp();
-		this.douPicName = douPicName;
+		this.douPicUrl = douPicUrl;
 		this.content = content;
 	}
 
@@ -37,14 +36,6 @@ public class ChatMessage {
 		this.timeStamp = timeStamp;
 	}
 
-	public String getDouPicName() {
-		return douPicName;
-	}
-
-	public void setDouPicName(String douPicName) {
-		this.douPicName = douPicName;
-	}
-
 	public String getContent() {
 		return content;
 	}
@@ -53,13 +44,12 @@ public class ChatMessage {
 		this.content = content;
 	}
 
-	public String getCacheId() {
-		return cacheId;
+	public String getDouPicUrl() {
+		return douPicUrl;
 	}
 
-	public void setCacheId(String cacheId) {
-		this.cacheId = cacheId;
+	public void setDouPicUrl(String douPicUrl) {
+		this.douPicUrl = douPicUrl;
 	}
 
-	
 }

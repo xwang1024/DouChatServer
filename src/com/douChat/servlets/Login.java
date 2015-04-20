@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.douChat.logic.OnlineList;
+import com.douChat.beans.UserBean;
+import com.douChat.beans.impl.UserBeanImpl;
 import com.douChat.servlets.helper.PostHelper;
 
 /**
@@ -22,56 +23,57 @@ import com.douChat.servlets.helper.PostHelper;
 @WebServlet("/login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private UserBean userBean;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public Login() {
 		super();
-		// TODO Auto-generated constructor stub
+		userBean = new UserBeanImpl();
 	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		// JSONObject feedback = new JSONObject();
-		// try {
-		// feedback.put("status", "error");
-		// feedback.put("message", "Login method must be POST!");
-		// } catch (JSONException e) {
-		// e.printStackTrace();
-		// }
-		// ServletOutputStream out = response.getOutputStream();
-		// out.print(feedback.toString());
-		// out.flush();
-		// out.close();
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("application/json;charset=UTF-8");
+		JSONObject feedback = new JSONObject();
+		try {
+			feedback.put("status", "error");
+			feedback.put("message", "Unimplemented!");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		ServletOutputStream out = response.getOutputStream();
+		out.print(feedback.toString());
+		out.flush();
+		out.close();
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		Map<String, String> postMap = PostHelper.getPostContent(request
-				.getInputStream());
-
-		OnlineList onlineList = OnlineList.getInstance();
-		String accessKey = onlineList.login(postMap.get("username"),
-				request.getRemoteAddr());
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("application/json;charset=UTF-8");
 		JSONObject feedback = new JSONObject();
 		try {
-			feedback.put("status", "ok");
-			feedback.put("accessKey", accessKey);
+			Map<String, String> postMap = PostHelper.getPostContent(request.getInputStream());
+			String username = postMap.get("username");
+			// Check if username is empty
+			if (username == null || username.length() == 0) {
+				feedback.put("status", "error");
+				feedback.put("message", "Empty username!");
+			} else {
+				String accessKey = userBean.login(username, request.getRemoteHost(), request.getSession().getId());
+				feedback.put("status", "ok");
+				feedback.put("accessKey", accessKey);
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		System.out.println(postMap.get("username"));
-		System.out.println(request.getRemoteAddr());
-		response.setContentType("application/json;charset=UTF-8");
 		ServletOutputStream out = response.getOutputStream();
 		out.print(feedback.toString());
 		out.flush();

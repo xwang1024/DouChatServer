@@ -1,10 +1,8 @@
 var ROOT_URL = "/DouChatServer";
 var LOGIN_PATH = "/login";
-var GET_MESSAGE_PATH = "/chat/getMessage";
-var SEND_MESSAGE_PATH = "/chat/sendMessage";
+var CHAT_PATH = "/chat";
 var LOGIN_URL = ROOT_URL + LOGIN_PATH;
-var GET_MESSAGE_URL = ROOT_URL + GET_MESSAGE_PATH;
-var SEND_MESSAGE_URL = ROOT_URL + SEND_MESSAGE_PATH;
+var CHAT_URL = ROOT_URL + CHAT_PATH;
 
 var myName;
 var accessKey;
@@ -28,8 +26,7 @@ function login(username) {
 }
 
 function getMessage() {
-	$.post(GET_MESSAGE_URL, {
-		"accessKey": accessKey,
+	$.get(GET_MESSAGE_URL, {
 		"timestamp": lastGetStamp
 	}, function(data, status) {
 		if(status != "success") {
@@ -48,7 +45,6 @@ function getMessage() {
 
 function sendMessage(message) {
 	$.post(SEND_MESSAGE_URL, {
-		"accessKey":accessKey,
 		"message":message
 	}, function(data, status) {
 		if(data["status"] != "ok") {
