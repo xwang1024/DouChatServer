@@ -11,13 +11,13 @@
 		<div class="loginFrame">
 			<div class="douTitle loginTitle">Please login...</div>
 			<div class="loginInputArea">
-				<input type="text" placeholder="Please enter you nickname...">
+				<input type="text" placeholder="Please enter you nickname..." name="usernameTf">
 				<br/>
-				<span>Any other name please...</span>
+				<span id="loginFeedback">Any other name please...</span>
 			</div>
 			<div class="loginSubmitArea">
-				<button>Return</button>
-				<button>Login</button>
+				<button id="loginReturnBtn">Return</button>
+				<button id="loginBtn">Login</button>
 			</div>
 		</div>
 	</div>
@@ -48,7 +48,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="myMessagePane">
+			<div class="myMessagePane demoPane">
 				<div class="headIcon">W</div>
 				<div class="messageBody">
 					<div class="namePane">Water</div>
@@ -62,10 +62,12 @@
 			</div>
 		</div>
 		<div class="douMsgSender">
-			<input class="douInput" type="text">
-			<button class="douSendBtn">Send</button>
+			<input class="douInput" type="text" name="sendMessageTf">
+			<button class="douSendBtn" id="sendMessageBtn">Send</button>
 		</div>
 	</div>
+	<script type="text/javascript" src="scripts/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="scripts/douChat.js"></script>
 </body>
 </html>
 

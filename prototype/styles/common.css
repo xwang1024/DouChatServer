@@ -84,6 +84,7 @@ button:active {
 
 .loginInputArea>span {
 	color:red;
+	display: none;
 }
 
 .loginSubmitArea {
@@ -224,4 +225,8 @@ button:active {
 .myMessagePane .messageContainer {
 	float: right;
 	border-radius: 5px 0 5px 5px;
+}
+
+.demoPane {
+	display: none;
 }
