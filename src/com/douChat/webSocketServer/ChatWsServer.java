@@ -56,6 +56,7 @@ public class ChatWsServer {
 				} else {
 					feedback.put("status", "ok");
 					feedback.put("accessKey", accessKey);
+					WsSessionList.getInstance().sessionLogin(session, username);
 				}
 				break;
 			case "send":
@@ -102,8 +103,9 @@ public class ChatWsServer {
 	}
 
 	@OnClose
-	public void onClose(Session session) {
+	public void onClose(Session session) throws Exception {
 		LOGGER.log(Level.INFO, "Close connection for client: {0}", session.getId());
+		userBean.removeUser(WsSessionList.getInstance().getUsername(session));
 		WsSessionList.getInstance().unregisterSession(session);
 	}
 

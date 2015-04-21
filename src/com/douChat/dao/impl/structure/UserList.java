@@ -19,6 +19,14 @@ public class UserList {
 		return instance == null ? (instance = new UserList()) : (instance);
 	}
 	
+	public void removeUser(String username) {
+		String accessKey = name_key.get(username);
+		if(accessKey != null) {
+			key_info.remove(accessKey);
+			name_key.remove(username);
+		}
+	}
+	
 	public String getUsername(String accessKey) {
 		return key_info.get(accessKey).name;
 	}

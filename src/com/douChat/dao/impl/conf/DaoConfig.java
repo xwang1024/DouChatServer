@@ -10,6 +10,7 @@ public class DaoConfig {
 	private String imagePath;
 	private String configPath;
 	private String cachePath;
+	private String fontPath;
 
 	private DaoConfig() throws Exception {
 		System.out.println(this.getClass().getResource(XML_NAME));
@@ -18,6 +19,7 @@ public class DaoConfig {
 		imagePath = xmlHelper.getString("/DouData/DouImage/Path");
 		configPath = xmlHelper.getString("/DouData/DouConfig/Path");
 		cachePath = xmlHelper.getString("/DouData/DouCache/Path");
+		fontPath = xmlHelper.getString("/DouData/DouFont/Path");
 	}
 	
 	public static DaoConfig getInstance() throws Exception {
@@ -47,6 +49,12 @@ public class DaoConfig {
 	public void setCachePath(String cachePath) {
 		this.cachePath = cachePath;
 	}
-	
-	
+
+	public String getFontPath() {
+		return fontPath;
+	}
+
+	public void setFontPath(String fontPath) {
+		this.fontPath = fontPath;
+	}
 }

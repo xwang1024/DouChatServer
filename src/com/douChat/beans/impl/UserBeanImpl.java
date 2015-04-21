@@ -23,4 +23,9 @@ public class UserBeanImpl implements UserBean {
 	public String getUsername(String accessKey) throws Exception {
 		return userDao.getUsername(accessKey);
 	}
+
+	@Override
+	public void removeUser(String username) throws Exception {
+		userDao.removeUser(username);
+	}
 }

@@ -1,7 +1,7 @@
-var ROOT_URL = "/DouChatServer";
-var LOGIN_PATH = "/login";
-var CHAT_PATH = "/chat";
-var IMAGE_PATH = "/cache";
+var ROOT_URL = "/DouChatServer/";
+var LOGIN_PATH = "login";
+var CHAT_PATH = "chat";
+var IMAGE_PATH = "cache";
 var LOGIN_URL = ROOT_URL + LOGIN_PATH;
 var CHAT_URL = ROOT_URL + CHAT_PATH;
 var IMAGE_URL = ROOT_URL + IMAGE_PATH;
@@ -84,9 +84,9 @@ function addMessageToList(pane, name, imageId) {
 }
 
 function initWebSocket() {
-	ws = new WebSocket("ws://localhost:8080/DouChatServer/");
+	ws = new WebSocket("ws://" + location.hostname + ":" + location.port + ROOT_URL);
 	ws.onopen = function() {
-		alert("ws open");
+		console.log("ws open");
 	};
 	ws.onmessage = function(event) {
 		var feedback = JSON.parse(event.data);
@@ -108,10 +108,10 @@ function initWebSocket() {
 		}
 	};
 	ws.onclose = function(event) {
-		alert("ws close");
+		console.log("ws close");
 	};
 	ws.onerror = function(event) {
-		alert("ws error");
+		console.log("ws error");
 	};
 }
 

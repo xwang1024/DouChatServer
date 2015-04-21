@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DouData 
-	xmlns="http://douChat.cn/dao"
-	xmlns:xsi="http://douChat.cn/dao-instance"
-	xsi:schemaLocation="http://douChat.cn/dao DouData.xsd">
+<DouData>
 	<DouImage>
 		<Path>/home/xin/douData/img</Path>
 	</DouImage>
@@ -12,4 +9,7 @@
 	<DouCache>
 		<Path>/home/xin/douData/cache</Path>
 	</DouCache>
+	<DouFont>
+		<Path>/home/xin/douData/font</Path>
+	</DouFont>
 </DouData>

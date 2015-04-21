@@ -29,4 +29,9 @@ public class UserDaoImpl implements UserDao {
 		System.out.println("UserDaoImpl getUsername");
 		return list.getUsername(accessKey);
 	}
+
+	@Override
+	public void removeUser(String username) {
+		list.removeUser(username);
+	}
 }
