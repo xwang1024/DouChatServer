@@ -12,82 +12,92 @@ var lastGetStamp = 0;
 var dataType = "json";
 
 function login(username) {
-	$("#loginFeedback").css("display","none");
+	$("#loginFeedback").css("display", "none");
 	$.post(LOGIN_URL, {
-		"username":username
+		"username" : username
 	}, function(data, status) {
-		if(data["status"] != "ok") {
-			$("#loginFeedback").html(data["message"]).css("display","block");
+		if (data["status"] != "ok") {
+			$("#loginFeedback").html(data["message"]).css("display", "block");
 		} else {
 			myName = username;
 			hideLoginFrame();
 		}
-	},dataType);
+	}, dataType);
 }
 
 function getMessage() {
-	$.get(CHAT_URL, {
-		"timestamp": lastGetStamp
-	}, function(data, status) {
-		if(status != "success") {
-			alert("Feedback: " + status);
-			return;
+	$.ajax({
+		url : CHAT_URL,
+		data : {},
+		type : "post",
+		cache : false,
+		dataType : "json",
+		success : function(data) {
+			if (data["status"] != "ok") {
+				alert(data["message"]);
+			} else {
+				$.each(data["messageList"], function(idx, msg) {
+					addMessageToList(".messagePane", msg["username"],
+							msg["imageId"]);
+				});
+				getMessage();
+			}
+		},
+		error : function() {
+			alert("There is something wrong with getting message.");
 		}
-		if(data["status"] != "ok") {
-			alert(data["message"]);
-		} else {
-			$.each(data["messageList"], function(idx,msg) {
-				addMessageToList(".messagePane", msg["username"], msg["imageId"]);
-			});
-			lastGetStamp = data["timestamp"];
-		}
-	},dataType);
+	});
 }
 
 function sendMessage(message) {
 	$.post(CHAT_URL, {
-		"message":message
+		"message" : message
 	}, function(data, status) {
-		if(data["status"] != "ok") {
+		if (data["status"] != "ok") {
 			alert(data["message"]);
 		} else {
 			addMessageToList(".myMessagePane", myName, data["imageId"])
 		}
-	},dataType);
+	}, dataType);
 }
 
 function checkLogin() {
-	if(typeof(myName) == "undefined") {
+	if (typeof (myName) == "undefined") {
 		return false;
 	}
 	return true;
 }
 
 function showLoginFrame() {
-	$(".mask").css({"display":"block"});
+	$(".mask").css({
+		"display" : "block"
+	});
 }
 
 function hideLoginFrame() {
-	$(".mask").css({"display":"none"});
+	$(".mask").css({
+		"display" : "none"
+	});
 }
 
 function loginAction() {
 	var username = $("input[name='usernameTf']").val();
-	if(username == "") {
-		$("#loginFeedback").html("Nick name cannot be empty.").css("display","block");
+	if (username == "") {
+		$("#loginFeedback").html("Nick name cannot be empty.").css("display",
+				"block");
 		return;
 	}
 	login(username);
 }
 
 function sendMessageAction() {
-	if(!checkLogin()) {
+	if (!checkLogin()) {
 		showLoginFrame();
 		return;
 	}
 	var message = $("input[name='sendMessageTf']").val();
 	$("input[name='sendMessageTf']").val("");
-	if(message == "") {
+	if (message == "") {
 		return;
 	}
 	sendMessage(message);
@@ -98,40 +108,49 @@ function generateImageQueryUrl(imageId) {
 }
 
 function addMessageToList(pane, name, imageId) {
-//	alert(generateImageQueryUrl(imageId));
-	$img = $(pane + ".demoPane").clone()
-		.appendTo($(".douMsgList"))
-		.removeClass("demoPane")
-		.find(".headIcon").html(name[0])
-		.siblings(".messageBody")
-		.find(".namePane").html(name)
-		.siblings(".messageContentPane")
-		.find("img")
-		.attr("src",generateImageQueryUrl(imageId));
+	// alert(generateImageQueryUrl(imageId));
+	$img = $(pane + ".demoPane").clone().appendTo($(".douMsgList"))
+			.removeClass("demoPane").find(".headIcon").html(name[0]).siblings(
+					".messageBody").find(".namePane").html(name).siblings(
+					".messageContentPane").find("img").attr("src",
+					generateImageQueryUrl(imageId));
 	$(".douMsgList").scrollTop($(".douMsgList")[0].scrollHeight);
 }
 
 function startMessageThread() {
-	var tid = setInterval(function() {
-		var feedback = getMessage();
-	},1000);
-	return tid;
+	getMessage();
 }
 
+function initWebSocket() {
+	var ws = new WebSocket("ws://localhost:8080");
+	ws.onopen = function() {
+		alert("ws open");
+		ws.send("hello");
+	};
+	ws.onmessage = function(evt) {
+		alert("ws message");
+	};
+	ws.onclose = function(evt) {
+		alert("ws close");
+	};
+	ws.onerror = function(evt) {
+		alert("ws error");
+	};
+}
 
 $(document).ready(function() {
-	 $("#loginBtn").bind("click",loginAction);
-	 $("input[name='usernameTf']").bind("keypress", function(keyEvent) {
-	 	if(keyEvent.keyCode == 13) {
-	 		loginAction();
-	 	}
-	 });
-	 $("#loginReturnBtn").bind("click",hideLoginFrame);
-	 $("#sendMessageBtn").bind("click",sendMessageAction);
-	 $("input[name='sendMessageTf']").bind("keypress", function(keyEvent) {
-	 	if(keyEvent.keyCode == 13) {
-	 		sendMessageAction();
-	 	}
-	 });
-	var tid = startMessageThread();
+	$("#loginBtn").bind("click", loginAction);
+	$("input[name='usernameTf']").bind("keypress", function(keyEvent) {
+		if (keyEvent.keyCode == 13) {
+			loginAction();
+		}
+	});
+	$("#loginReturnBtn").bind("click", hideLoginFrame);
+	$("#sendMessageBtn").bind("click", sendMessageAction);
+	$("input[name='sendMessageTf']").bind("keypress", function(keyEvent) {
+		if (keyEvent.keyCode == 13) {
+			sendMessageAction();
+		}
+	});
+	// startMessageThread();
 });

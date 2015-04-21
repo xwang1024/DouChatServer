@@ -18,6 +18,10 @@ public class UserList {
 	public static UserList getInstance() {
 		return instance == null ? (instance = new UserList()) : (instance);
 	}
+	
+	public String getUsername(String accessKey) {
+		return name_key.get(accessKey);
+	}
 
 	public synchronized boolean existsUser(String name) {
 		return name_key.containsKey(name);

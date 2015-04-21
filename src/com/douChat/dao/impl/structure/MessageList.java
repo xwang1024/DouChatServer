@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import com.douChat.entities.DouMessage;
 
+@Deprecated
 public class MessageList {
 	private static MessageList instance;
 	private List<DouMessage> list;

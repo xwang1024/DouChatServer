@@ -4,6 +4,7 @@ import com.douChat.dao.MessageDao;
 import com.douChat.dao.impl.structure.MessageList;
 import com.douChat.entities.DouMessage;
 
+@Deprecated
 public class MessageDaoImpl implements MessageDao {
 	private MessageList list;
 

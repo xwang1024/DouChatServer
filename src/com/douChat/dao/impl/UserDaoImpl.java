@@ -22,4 +22,10 @@ public class UserDaoImpl implements UserDao {
 		System.out.println("UserDaoImpl addUser");
 		return list.addUser(username, ip, devId);
 	}
+	
+	@Override
+	public String getUsername(String accessKey) {
+		System.out.println("UserDaoImpl getUsername");
+		return list.getUsername(accessKey);
+	}
 }

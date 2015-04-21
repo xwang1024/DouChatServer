@@ -18,4 +18,9 @@ public class UserBeanImpl implements UserBean {
 		}
 		return userDao.addUser(username, remoteIp, devId);
 	}
+
+	@Override
+	public String getUsername(String accessKey) throws Exception {
+		return userDao.getUsername(accessKey);
+	}
 }
