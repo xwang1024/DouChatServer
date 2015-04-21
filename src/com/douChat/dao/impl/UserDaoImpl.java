@@ -4,6 +4,7 @@ import com.douChat.dao.UserDao;
 import com.douChat.dao.impl.structure.UserList;
 
 public class UserDaoImpl implements UserDao {
+
 	private UserList list;
 
 	public UserDaoImpl() {

@@ -1,4 +1,4 @@
-package com.douChat.webSocket;
+package com.douChat.webSocketServer;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,13 +15,21 @@ import org.json.JSONObject;
 
 import com.douChat.beans.ChatBean;
 import com.douChat.beans.UserBean;
+import com.douChat.beans.impl.ChatBeanImpl;
+import com.douChat.beans.impl.UserBeanImpl;
 import com.douChat.entities.DouMessage;
+import com.douChat.webSocketServer.structure.WsSessionList;
 
 @ServerEndpoint(value = "/")
 public class ChatWsServer {
 	private static final Logger LOGGER = Logger.getLogger(ChatWsServer.class.getName());
 	private UserBean userBean;
 	private ChatBean chatBean;
+	
+	public ChatWsServer() throws Exception {
+		userBean = new UserBeanImpl();
+		chatBean = new ChatBeanImpl();
+	}
 	@OnOpen
 	public void onOpen(Session session) {
 		LOGGER.log(Level.INFO, "New connection with client: {0}", session.getId());
@@ -34,12 +42,14 @@ public class ChatWsServer {
 		JSONObject feedback = new JSONObject();
 		try {
 			JSONObject json = new JSONObject(content);
-			String operation = json.getString("function");
+			String action = json.getString("action");
+			feedback.put("action", action);
 			String username, accessKey, message;
-			switch(operation) {
+			switch(action) {
 			case "login":
 				username = json.getString("username");
 				accessKey = userBean.login(username, "WebSocket", "ws" + session.getId());
+				LOGGER.log(Level.INFO, "Create accessKey: {0}", accessKey);
 				if (accessKey == null) {
 					feedback.put("status", "error");
 					feedback.put("message", "Username already exist!");
@@ -68,8 +78,12 @@ public class ChatWsServer {
 					break;
 				}
 				feedback.put("status", "ok");
+				feedback.put("username", douMessage.getSender());
+				feedback.put("time", douMessage.getTimeStamp());
 				feedback.put("imageId", douMessage.getDouPicId());
 				JSONObject boardcast = new JSONObject();
+				boardcast.put("status", "ok");
+				boardcast.put("action", "boardcast");
 				boardcast.put("username", douMessage.getSender());
 				boardcast.put("time", douMessage.getTimeStamp());
 				boardcast.put("imageId", douMessage.getDouPicId());

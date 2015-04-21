@@ -6,63 +6,29 @@ var LOGIN_URL = ROOT_URL + LOGIN_PATH;
 var CHAT_URL = ROOT_URL + CHAT_PATH;
 var IMAGE_URL = ROOT_URL + IMAGE_PATH;
 
-var myName;
-var lastGetStamp = 0;
-
-var dataType = "json";
+var ws;
+var accessKey;
 
 function login(username) {
 	$("#loginFeedback").css("display", "none");
-	$.post(LOGIN_URL, {
+	var requestJson = {
+		"action" : "login",
 		"username" : username
-	}, function(data, status) {
-		if (data["status"] != "ok") {
-			$("#loginFeedback").html(data["message"]).css("display", "block");
-		} else {
-			myName = username;
-			hideLoginFrame();
-		}
-	}, dataType);
-}
-
-function getMessage() {
-	$.ajax({
-		url : CHAT_URL,
-		data : {},
-		type : "post",
-		cache : false,
-		dataType : "json",
-		success : function(data) {
-			if (data["status"] != "ok") {
-				alert(data["message"]);
-			} else {
-				$.each(data["messageList"], function(idx, msg) {
-					addMessageToList(".messagePane", msg["username"],
-							msg["imageId"]);
-				});
-				getMessage();
-			}
-		},
-		error : function() {
-			alert("There is something wrong with getting message.");
-		}
-	});
+	};
+	ws.send(JSON.stringify(requestJson));
 }
 
 function sendMessage(message) {
-	$.post(CHAT_URL, {
+	var requestJson = {
+		"action" : "send",
+		"accessKey" : accessKey,
 		"message" : message
-	}, function(data, status) {
-		if (data["status"] != "ok") {
-			alert(data["message"]);
-		} else {
-			addMessageToList(".myMessagePane", myName, data["imageId"])
-		}
-	}, dataType);
+	};
+	ws.send(JSON.stringify(requestJson));
 }
 
 function checkLogin() {
-	if (typeof (myName) == "undefined") {
+	if (typeof (accessKey) == "undefined") {
 		return false;
 	}
 	return true;
@@ -117,28 +83,41 @@ function addMessageToList(pane, name, imageId) {
 	$(".douMsgList").scrollTop($(".douMsgList")[0].scrollHeight);
 }
 
-function startMessageThread() {
-	getMessage();
-}
-
 function initWebSocket() {
-	var ws = new WebSocket("ws://localhost:8080");
+	ws = new WebSocket("ws://localhost:8080/DouChatServer/");
 	ws.onopen = function() {
 		alert("ws open");
-		ws.send("hello");
 	};
-	ws.onmessage = function(evt) {
-		alert("ws message");
+	ws.onmessage = function(event) {
+		var feedback = JSON.parse(event.data);
+		if (feedback.status != "ok") {
+			alert("Error occured: " + feedback.message);
+			return;
+		}
+		switch (feedback.action) {
+		case "login":
+			accessKey = feedback.accessKey;
+			hideLoginFrame();
+			break;
+		case "send":
+			addMessageToList(".myMessagePane", feedback.username, feedback.imageId);
+			break;
+		case "boardcast":
+			addMessageToList(".messagePane", feedback.username, feedback.imageId);
+			break;
+		}
 	};
-	ws.onclose = function(evt) {
+	ws.onclose = function(event) {
 		alert("ws close");
 	};
-	ws.onerror = function(evt) {
+	ws.onerror = function(event) {
 		alert("ws error");
 	};
 }
 
 $(document).ready(function() {
+	initWebSocket();
+
 	$("#loginBtn").bind("click", loginAction);
 	$("input[name='usernameTf']").bind("keypress", function(keyEvent) {
 		if (keyEvent.keyCode == 13) {
@@ -152,5 +131,4 @@ $(document).ready(function() {
 			sendMessageAction();
 		}
 	});
-	// startMessageThread();
 });

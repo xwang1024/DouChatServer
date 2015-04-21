@@ -20,7 +20,7 @@ public class UserList {
 	}
 	
 	public String getUsername(String accessKey) {
-		return name_key.get(accessKey);
+		return key_info.get(accessKey).name;
 	}
 
 	public synchronized boolean existsUser(String name) {

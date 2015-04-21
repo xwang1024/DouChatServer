@@ -1,4 +1,4 @@
-package com.douChat.webSocket;
+package com.douChat.webSocketServer.structure;
 
 import java.io.IOException;
 import java.util.LinkedList;
