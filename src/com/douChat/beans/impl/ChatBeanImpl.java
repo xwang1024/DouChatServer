@@ -10,23 +10,19 @@ import com.douChat.beans.ChatBean;
 import com.douChat.beans.UserBean;
 import com.douChat.dao.DouIconCacheDao;
 import com.douChat.dao.DouIconDao;
-import com.douChat.dao.FontDao;
 import com.douChat.dao.impl.DouIconCacheDaoImpl;
 import com.douChat.dao.impl.DouIconDaoImpl;
-import com.douChat.dao.impl.FontDaoImpl;
 import com.douChat.entities.DouMessage;
 import com.douChat.entities.DouPic;
 
 public class ChatBeanImpl implements ChatBean {
 	private DouIconDao did;
 	private DouIconCacheDao dicd;
-	private FontDao fd;
 	private UserBean ub;
 
 	public ChatBeanImpl() throws Exception {
 		did = new DouIconDaoImpl();
 		dicd = new DouIconCacheDaoImpl();
-		fd = new FontDaoImpl();
 		ub = new UserBeanImpl();
 	}
 
@@ -40,18 +36,20 @@ public class ChatBeanImpl implements ChatBean {
 			return null;
 		}
 		DouMessage douMessage = new DouMessage(username, picId, message);
-//		md.addMessage(douMessage);
+		// md.addMessage(douMessage);
 		return douMessage;
 	}
 
 	private BufferedImage generate(DouPic douPic, String message) throws Exception {
 		BufferedImage buffImg = douPic.getImage();
+		buffImg = buffImg.getSubimage(0, 0, buffImg.getWidth(), buffImg.getHeight());
+
 		Color coverColor = douPic.getCoverColor();
 		Integer[] coverAreaX = douPic.getCoverVerticeX();
 		Integer[] coverAreaY = douPic.getCoverVerticeY();
 		String fontFamily = douPic.getFontFamily();
 		Graphics2D g2d = (Graphics2D) buffImg.getGraphics();
-		
+
 		g2d.setPaint(coverColor);
 		g2d.fillRect(coverAreaX[0], coverAreaY[0], coverAreaX[1], coverAreaY[1]);
 
@@ -59,9 +57,9 @@ public class ChatBeanImpl implements ChatBean {
 		int coverHeight = Math.abs(coverAreaY[1] - coverAreaY[0]);
 		int fontSize = coverWidth / message.length();
 		if (fontSize >= coverHeight) {
-			fontSize = (int) (coverHeight*0.9);
+			fontSize = (int) (coverHeight * 0.9);
 		} else {
-			fontSize = (int) (Math.sqrt(coverWidth * coverHeight / message.length())*0.9);
+			fontSize = (int) (Math.sqrt(coverWidth * coverHeight / message.length()) * 0.9);
 		}
 		int lineLen = message.length();
 		int lineCnt = 1;
@@ -70,7 +68,7 @@ public class ChatBeanImpl implements ChatBean {
 			lineCnt = message.length() / lineLen + 1;
 		}
 
-		Font font = fd.getFont("simsun.ttc", fontSize);
+		Font font = new Font("宋体", Font.PLAIN, fontSize);
 		g2d.setFont(font);
 		FontMetrics fm = g2d.getFontMetrics();
 		fontSize = fontSize * fontSize / fm.charWidth('测');
